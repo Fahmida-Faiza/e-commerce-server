@@ -45,7 +45,7 @@ const logger = (req, res,next) =>{
 const verifyToken=(req,res,next)=>{
   const token = req?.cookies?.token;
   // console.log('token in the middleware' , token)
-  //token nai 
+  //token pai nai 
   if(!token){
     return res.status(401).send({message: 'unauthorized access'})
   }
@@ -139,13 +139,13 @@ async function run() {
     // ////////jwt
 
     //query(jar data chaitysi) bookings
-    app.get("/cart",logger, async (req, res) => {
+    app.get("/cart",logger,verifyToken, async (req, res) => {
       console.log(req.query.email);
-      console.log('cook cookies', req.cookies)
+      // console.log('cook cookies', req.cookies)
       console.log("token owner info", req.user);
-      // if (req.user.email !== req.query.email) {
-      //   return res.send.status(403).send({ message: "forbidden access" });
-      // }
+      if (req.user.email !== req.query.email) {
+        return res.send.status(403).send({ message: "forbidden access" });
+      }
 
       let query = {};
       if (req.query?.email) {
